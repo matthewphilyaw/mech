@@ -1,0 +1,80 @@
+digraph t {
+    nodesep=0.5;
+    ranksep=0.5;
+    rankdir=LR;
+    
+    subgraph clusterSubsystem 
+    {
+        label="Sub System";
+        margin=50 
+
+        {
+            node [shape="square"]
+            rank=same
+            weapons;
+            shields;
+            drivetrain;
+            electrical;
+        }
+
+        subsystem [label="" shape="doublecircle"]
+        edge [arrowtail="normal", dir="both"]
+        weapons -> subsystem;
+        shields -> subsystem;
+        drivetrain -> subsystem;
+        electrical -> subsystem; 
+    }
+
+    subgraph clusterCore
+    {
+        label="Core System"
+        margin=50
+        node [shape="square"]
+
+        coresubbus [label="", shape="doublecircle"]
+        coremodulebus [label="", shape="doublecircle"]
+
+        subgraph clusterCoreDispatch 
+        {
+            label="Core Dispatch"
+            margin="25"
+            signal
+            action
+        }
+        registry
+
+        coresubbus -> signal
+        coresubbus -> registry
+        edge [label="discovery"]
+        registry -> coremodulebus [dir="both" arrowtail="normal"]
+        edge [label=""]
+        signal -> coremodulebus
+        edge [dir="both" arrowhead="none" arrowtail="normal"]
+        action -> coremodulebus
+        coresubbus -> action
+    }
+
+    subgraph clusterModule
+    {
+        label="Module System"
+        margin=50
+        node [shape="square"]
+        
+        modulebus [label="" shape="doublecircle"]
+
+        {
+            rank=same
+            joystick
+            pedals
+            steering         
+        }
+        
+        edge [dir="both" arrowtail="normal"]
+        modulebus -> joystick
+        modulebus -> pedals
+        modulebus -> steering
+    }
+
+    subsystem -> coresubbus [label="sub system bus", dir="both", arrowtail="normal"]
+    coremodulebus -> modulebus [label="module bus", dir="both", arrowtail="normal"]
+}
